@@ -26,7 +26,17 @@ export async function fetchWithRetry<T>(url: string, maxRetries: number = 3, del
 }
 
 export async function fetchWeatherData(): Promise<WeatherData[]> {
-    return fetchWithRetry<WeatherData[]>(WEATHER_STATS);
+    const data = await fetchWithRetry<any>(WEATHER_STATS);
+    console.log('Raw weather data structure:', JSON.stringify(data).substring(0, 500) + '...');
+    if (!Array.isArray(data)) {
+        console.error('Weather data is not an array:', typeof data);
+        if (data && typeof data === 'object' && Array.isArray(data.data)) {
+            return data.data;
+        }
+        return [];
+    }
+
+    return data;
 }
 
 export async function fetchHolidayData(): Promise<HolidayData[]> {

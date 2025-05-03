@@ -1,10 +1,36 @@
 import { WeatherData, HolidayData, ProcessedStats } from "../types/types";
 
 export function processWeatherData(weatherData: WeatherData[], holidayData: HolidayData[]): ProcessedStats {
-    const temperatures = weatherData.map(item => item.temperature);
+    const temperatures = weatherData
+        .map(item => {
+            const temp = Number(item.temperature);
+            if (isNaN(temp)) {
+                console.warn(`Invalid temperature value found: ${item.temperature}`);
+                return null;
+            }
+            return temp
+        })
+        .filter((temp): temp is number => temp !== null);
+
+    console.log('Extracted temperatures (sample):', temperatures.slice(0, 5));
+
+    if (temperatures.length === 0) {
+        console.error('No valid temperature values found in the data');
+        return {
+            maxTemp: 0,
+            avgTemp: 0,
+            minTemp: 0,
+            skyCountsText: 'No data available',
+            rainShowersText: 'No data available',
+            skyHolidaysText: 'No data available'
+        };
+    }
+
     const maxTemp = Math.max(...temperatures);
     const avgTemp = parseFloat((temperatures.reduce((sum, temp) => sum + temp, 0 / temperatures.length).toFixed(2)));
     const minTemp = Math.min(...temperatures);
+
+    console.log('Temperature stats:', { maxTemp, minTemp, avgTemp });
 
     const skyValues = weatherData.map(item => item.sky);
     const uniqueSkyValues = [...new Set(skyValues)];
