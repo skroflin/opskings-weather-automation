@@ -6,7 +6,7 @@ export interface WeatherData {
     date: string;
 }
 
-export interface HolidayDate {
+export interface HolidayData {
     date: string;
     name: string;
 }
