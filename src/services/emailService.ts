@@ -38,10 +38,22 @@ export async function sendEmail(
     to: string,
     content: string
 ): Promise<void> {
+    const candidateEmail = 'sven.kroflin@gmail.com';
+
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDay()).padStart(2, '0');
+    const hours = String(currentDate.getHours()).padStart(2, '0');
+    const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+    const seconds = String(currentDate.getSeconds()).padStart(2, '0');
+
+    const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
     const info = await transporter.sendMail({
         from,
         to,
-        subject: 'San Francisco Weather Stats for 2022-11',
+        subject: `OpsKings|Practical Challenge|${candidateEmail}|${formattedDateTime}`,
         text: `### scenario URL: https://github.com/skroflin/opskings-weather-automation ###\n\n${content}`,
     });
 
