@@ -12,8 +12,6 @@ export function processWeatherData(weatherData: WeatherData[], holidayData: Holi
         })
         .filter((temp): temp is number => temp !== null);
 
-    console.log('Extracted temperatures (sample):', temperatures.slice(0, 5));
-
     if (temperatures.length === 0) {
         console.error('No valid temperature values found in the data');
         return {
@@ -27,10 +25,9 @@ export function processWeatherData(weatherData: WeatherData[], holidayData: Holi
     }
 
     const maxTemp = Math.max(...temperatures);
-    const avgTemp = parseFloat((temperatures.reduce((sum, temp) => sum + temp, 0 / temperatures.length).toFixed(2)));
+    const sum = temperatures.reduce((acc, temp) => acc + temp, 0)
+    const avgTemp = parseFloat((sum / temperatures.length).toFixed(2));
     const minTemp = Math.min(...temperatures);
-
-    console.log('Temperature stats:', { maxTemp, minTemp, avgTemp });
 
     const skyValues = weatherData.map(item => item.sky);
     const uniqueSkyValues = [...new Set(skyValues)];
@@ -42,14 +39,21 @@ export function processWeatherData(weatherData: WeatherData[], holidayData: Holi
 
     const skyCountsText = Object.entries(skyCounts)
         .map(([sky, count]) => `${sky}: ${count}`)
-        .join('\n ');
+        .join('\n');
 
-    const rainShowers = weatherData
-        .filter(item => item.is_rainy)
-        .map(item => item.time);
+    const rainShowers: string[] = [];
+
+    weatherData.forEach(item => {
+        if (item.times_of_rain_showers) {
+            const times = item.times_of_rain_showers.split(',').map(time => time.trim())
+            times.forEach(time => {
+                rainShowers.push(`${item.date} ${time}`);
+            })
+        }
+    })
 
     const rainShowersText = rainShowers.length > 0
-        ? rainShowers.join('\n ')
+        ? rainShowers.join('\n')
         : 'No rain showers this month.';
 
     const holidayDates = holidayData.map(holiday => holiday.date);
@@ -58,7 +62,7 @@ export function processWeatherData(weatherData: WeatherData[], holidayData: Holi
         .map(item => `${item.date} - ${item.sky}`);
 
     const skyHolidaysText = skyDuringHolidays.length > 0
-        ? skyDuringHolidays.join('\n ')
+        ? skyDuringHolidays.join('\n')
         : 'No holidays this month.';
 
     return {

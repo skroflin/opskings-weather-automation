@@ -1,9 +1,12 @@
 export interface WeatherData {
-    temperature: number;
     sky: string;
-    is_rainy: boolean;
-    time: string;
+    city: string;
     date: string;
+    degrees_in_celsius: number;
+    times_of_rain_showers: string | null;
+    temperature?: string;
+    is_rainy?: boolean;
+    time?: string;
 }
 
 export interface HolidayData {

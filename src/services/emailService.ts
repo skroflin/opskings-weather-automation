@@ -14,23 +14,22 @@ export function createTransport(config: EmailConfig) {
 }
 
 export function generateEmailContent(stats: ProcessedStats): string {
-    return `
-    Hi, here are your San Francisco weather stats for 2022-11:
+    return `Hi, here are your San Francisco weather stats for 2022-11:
         
-    The max temperature was: ${stats.maxTemp}
-    The avg temperature was: ${stats.avgTemp}
-    The min temperature was: ${stats.minTemp}
+The max temperature was: ${stats.maxTemp}
+The avg temperature was: ${stats.avgTemp}
+The min temperature was: ${stats.minTemp}
         
-    Overview of unique "sky" values and their counts:
-        ${stats.skyCountsText}
+Overview of unique "sky" values and their counts:
+${stats.skyCountsText}
         
-    Rain showers:
-        ${stats.rainShowersText}
+Rain showers:
+${stats.rainShowersText}
         
-    "Sky" statuses during holidays:
-        ${stats.skyHolidaysText}
+"Sky" statuses during holidays:
+${stats.skyHolidaysText}
         
-    Have a nice day!`
+Have a nice day!`
 }
 
 export async function sendEmail(
