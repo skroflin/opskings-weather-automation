@@ -11,7 +11,8 @@ export interface WeatherData {
 
 export interface HolidayData {
     date: string;
-    name: string;
+    is_public_holiday: string;
+    name?: string;
 }
 
 export interface ProcessedStats {

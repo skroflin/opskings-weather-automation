@@ -56,7 +56,10 @@ export function processWeatherData(weatherData: WeatherData[], holidayData: Holi
         ? rainShowers.join('\n')
         : 'No rain showers this month.';
 
-    const holidayDates = holidayData.map(holiday => holiday.date);
+    const holidayDates = holidayData
+        .filter(holiday => holiday.is_public_holiday === "yes")
+        .map(holiday => holiday.date);
+
     const skyDuringHolidays = weatherData
         .filter(item => holidayDates.includes(item.date))
         .map(item => `${item.date} - ${item.sky}`);
