@@ -5,7 +5,7 @@ export function createTransport(config: EmailConfig) {
     return nodemailer.createTransport({
         host: config.host,
         port: config.port,
-        secure: false,
+        secure: config.port === 465,
         auth: {
             user: config.user,
             pass: config.pass,
@@ -36,7 +36,8 @@ export async function sendEmail(
     transporter: nodemailer.Transporter,
     from: string,
     to: string,
-    content: string
+    content: string,
+    attachmentPath: string
 ): Promise<void> {
     const candidateEmail = 'sven.kroflin@gmail.com';
 
@@ -55,6 +56,12 @@ export async function sendEmail(
         to,
         subject: `OpsKings|Practical Challenge|${candidateEmail}|${formattedDateTime}`,
         text: `### scenario URL: https://github.com/skroflin/opskings-weather-automation ###\n\n${content}`,
+        attachments: [
+            {
+                filename: 'weather_stats.json',
+                path: attachmentPath
+            }
+        ]
     });
 
     console.log('Email sent successfully:', info.messageId);

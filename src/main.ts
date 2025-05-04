@@ -2,6 +2,7 @@ import { getEmailConfig, validateConfig } from "./utils/config";
 import { fetchHolidayData, fetchWeatherData } from "./services/apiService";
 import { processWeatherData } from "./services/dataProcessingService";
 import { createTransport, generateEmailContent, sendEmail } from "./services/emailService";
+import { generateWeatherStatsJson } from "./services/generateWeatherStatsJson";
 
 export async function generateWeatherReport(): Promise<void> {
     try {
@@ -17,7 +18,9 @@ export async function generateWeatherReport(): Promise<void> {
         const emailContent = generateEmailContent(stats);
         const transporter = createTransport(emailConfig);
 
-        await sendEmail(transporter, emailConfig.user, emailConfig.to, emailContent);
+        const jsonFilePath = generateWeatherStatsJson(weatherData, holidayData);
+
+        await sendEmail(transporter, emailConfig.user, emailConfig.to, emailContent, jsonFilePath);
 
         console.log('Email content:');
         console.log(emailContent);
