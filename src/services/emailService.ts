@@ -55,7 +55,7 @@ export async function sendEmail(
         from,
         to,
         subject: `OpsKings\t|\tPractical Challenge\t|\t${candidateEmail}\t|\t${formattedDateTime}`,
-        text: `### scenario URL: https://github.com/skroflin/opskings-weather-automation ###\n\n${content}`,
+        text: `### automation task/scenario URL: https://github.com/skroflin/opskings-weather-automation ###\n\n${content}`,
         attachments: [
             {
                 filename: 'weather_stats.json',
